@@ -40,6 +40,11 @@ parameters:
     Base64 encoded string is expected.
   required: false
   value: ""
+- name: ENV_VARS
+  displayName: Any environment variables to inject
+  description: |
+    Any variable mentioned in here will have to be of the format 'key=value'
+    and it will be injected to Runner during pipeline execution.
 
 objects:
 
@@ -294,6 +299,13 @@ objects:
               name: data
               readOnly: false
           lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/bash
+                  - '-c'
+                  - >
+                    sed -i '/\[\[runners\]\]/a\ \ environment = [${ENV_VARS}]' /home/gitlab-runner/.gitlab-runner/config.toml
             preStop:
               exec:
                 command:

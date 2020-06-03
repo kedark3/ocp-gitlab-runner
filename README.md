@@ -75,6 +75,13 @@ concurrent build pods.
 
     required: false
 
+* ENV_VARS
+
+    description: Any variable mentioned in here will have to be of the format 'key=value'
+    and it will be injected to Runner during pipeline execution.
+
+    required: false
+
 ## Usage
 
 Add and instantiate the template:
@@ -84,7 +91,8 @@ oc process -f ocp-gitlab-runner-template.yaml \
   -p NAME="some_name" \
   -p GITLAB_HOST="example.com" \
   -p REGISTRATION_TOKEN="$(echo -n some_token | base64)" \
-  -p CONCURRENT="number_of_concurrent_pods" | oc create -f -
+  -p CONCURRENT="number_of_concurrent_pods" \
+  -p ENV_VARS="\"key1=val1\",\"key2=val2\""| oc create -f -
 ```
 
 Delete all created objects:
